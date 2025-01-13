@@ -1,0 +1,34 @@
+{
+  "name": "intro-to-js",
+  "version": "0.0.1",
+  "description": "Demo code to introducing JS",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=3000 --host=0.0.0.0",
+    "test": "npx eslint js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mlongano/intro-to-js.git"
+  },
+  "keywords": [
+    "html",
+    "css",
+    "javascript",
+    "tutorial",
+    "demo",
+    "introduction"
+  ],
+  "author": "Mauro Longano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mlongano/intro-to-js/issues"
+  },
+  "homepage": "https://github.com/mlongano/intro-to-js#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0",
+    "liveserver": "^0.1.20"
+  }
+}
