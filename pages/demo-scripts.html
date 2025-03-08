@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript File Explorer</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="../js/demos.js" defer></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      h1 {
+        color: #333;
+      }
+      #file-list {
+        list-style-type: none;
+        padding: 0;
+      }
+      .js-file {
+        margin: 10px 0;
+        padding: 15px;
+        background-color: #f5f5f5;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      .js-file:hover {
+        background-color: #e0e0e0;
+      }
+      .file-name {
+        font-weight: bold;
+        color: #2c3e50;
+      }
+      .file-description {
+        color: #7f8c8d;
+        margin-top: 5px;
+      }
+      #execution-area {
+        margin-top: 30px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+      }
+      #output {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff;
+        min-height: 100px;
+      }
+      #filter-container {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f0f8ff;
+        border-radius: 5px;
+      }
+      .filter-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .filter-item input {
+        flex-grow: 1;
+        padding: 5px;
+        margin-right: 10px;
+      }
+      .filter-item button {
+        background-color: #ff6b6b;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      #add-filter-btn {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 3px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body class="container p-8">
+    <h1 class="text-3xl font-bold mb-4">Esempi Javascript</h1>
+
+    <div>
+      <input
+        type="file"
+        id="directory-input"
+        webkitdirectory
+        directory
+        multiple
+      />
+      <p>Select a directory containing JavaScript files</p>
+    </div>
+
+    <ul class="list-none" id="file-list"></ul>
+    <div id="root"></div>
+    <div id="filter-container">
+      <h3>Console Output Filters</h3>
+      <p>Add regular expressions to filter out matching console output lines</p>
+      <div id="filters-list"></div>
+      <button id="add-filter-btn">Add Filter</button>
+    </div>
+
+    <div id="execution-area">
+      <h2>Script Execution</h2>
+      <div>
+        <strong>Currently loaded:</strong> <span id="current-script">None</span>
+      </div>
+      <div id="output"></div>
+    </div>
+  </body>
+</html>
