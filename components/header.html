@@ -6,11 +6,16 @@
     <title></title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
   </head>
-  <body class="w-screen h-screen bg-gray-900 text-white">
-    <nav class="flex justify-space-between items-center px-4 w-full h-full">
-      <ul
-        class="flex justify-space-between items-center space-x-4 w-full h-full"
+  <body
+    class="flex justify-between items-center w-screen h-screen bg-gray-900 text-white"
+  >
+    <section class="flex justify-end items-center pl-4 pr-10 h-full">
+      <a href="/" target="_top" class="text-2xl text-purple-500 drop-shadow-lg"
+        >JS Playground</a
       >
+    </section>
+    <nav class="flex grow justify-between items-center px-4 h-full">
+      <ul class="flex justify-between items-center space-x-4 w-full h-full">
         <li>
           <a href="../pages/demo-scripts.html" target="_top"
             >Vari script dimostrativi</a
