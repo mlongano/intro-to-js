@@ -6,118 +6,96 @@
     <title>JavaScript File Explorer</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script src="../js/demos.js" defer></script>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-      h1 {
-        color: #333;
-      }
-      #file-list {
-        list-style-type: none;
-        padding: 0;
-      }
-      .js-file {
-        margin: 10px 0;
-        padding: 15px;
-        background-color: #f5f5f5;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.2s;
-      }
-      .js-file:hover {
-        background-color: #e0e0e0;
-      }
-      .file-name {
-        font-weight: bold;
-        color: #2c3e50;
-      }
-      .file-description {
-        color: #7f8c8d;
-        margin-top: 5px;
-      }
-      #execution-area {
-        margin-top: 30px;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-      }
-      #output {
-        margin-top: 10px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #fff;
-        min-height: 100px;
-      }
-      #filter-container {
-        margin-top: 20px;
-        padding: 15px;
-        background-color: #f0f8ff;
-        border-radius: 5px;
-      }
-      .filter-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 8px;
-      }
-      .filter-item input {
-        flex-grow: 1;
-        padding: 5px;
-        margin-right: 10px;
-      }
-      .filter-item button {
-        background-color: #ff6b6b;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 3px;
-        cursor: pointer;
-      }
-      #add-filter-btn {
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 3px;
-        cursor: pointer;
-        margin-top: 10px;
-      }
-    </style>
   </head>
-  <body class="container p-8">
-    <h1 class="text-3xl font-bold mb-4">Esempi Javascript</h1>
+  <body
+    class="w-screen bg-white text-gray-900 dark:bg-black dark:text-white bg-[url(/images/background.jpeg)] bg-cover"
+  >
+    <header>
+      <iframe
+        id="header-iframe"
+        src="../components/header.html?param=this is a param&param1=this is the second param"
+        frameborder="0"
+        scrolling="no"
+        style="width: 100%; height: 4rem; border: none; overflow: hidden"
+      >
+      </iframe>
+    </header>
+    <main
+      class="bg-black/90 backdrop-blur-none flex flex-col justify-center items-center p-8"
+    >
+      <h1 class="text-3xl font-bold mb-4">Esempi Javascript</h1>
 
-    <div>
-      <input
-        type="file"
-        id="directory-input"
-        webkitdirectory
-        directory
-        multiple
-      />
-      <p>Select a directory containing JavaScript files</p>
-    </div>
+      <hr class="w-full h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
 
-    <ul class="list-none" id="file-list"></ul>
-    <div id="root"></div>
-    <div id="filter-container">
-      <h3>Console Output Filters</h3>
-      <p>Add regular expressions to filter out matching console output lines</p>
-      <div id="filters-list"></div>
-      <button id="add-filter-btn">Add Filter</button>
-    </div>
-
-    <div id="execution-area">
-      <h2>Script Execution</h2>
       <div>
-        <strong>Currently loaded:</strong> <span id="current-script">None</span>
+        <label
+          class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+          for="directory-input"
+          >Upload scripts from a directory</label
+        >
+        <input
+          class="block w-full max-w-3xs text-sm file:mr-4 file:rounded-l-lg file:border-0 file:bg-primary dark:file:bg-gray-800 file:py-2.5 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-700 focus:outline-none bg-gray-500 rounded-lg outline-2 outline-blue-500/50"
+          aria-describedby="file_input_help"
+          id="directory-input"
+          type="file"
+          webkitdirectory
+          directory
+          multiple
+        />
+        <p class="mt-1 text-lg text-gray-500" id="file_input_help">
+          Select a directory containing JavaScript files
+        </p>
       </div>
-      <div id="output"></div>
-    </div>
+
+      <ul class="mt-4 w-120" id="file-list"></ul>
+      <section>
+        <button
+          id="clear-script-cache-btn"
+          class="bg-red-500 hover:bg-red-700 text-white transition font-bold py-2 px-4 rounded"
+        >
+          Clear Script Cache
+        </button>
+      </section>
+      <hr
+        class="hidden w-full h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"
+      />
+      <div
+        id="filter-container"
+        class="hidden w-120 mt-4 bg-gray-800 rounded p-4"
+      >
+        <h3>Console Output Filters</h3>
+        <p class="mt-1 text-sm text-gray-500 mb-4">
+          Add regular expressions to filter out matching console output lines
+        </p>
+        <div id="filters-list"></div>
+        <button
+          id="add-filter-btn"
+          class="bg-green-500 hover:bg-green-700 text-white transition font-bold py-2 px-4 rounded mt-4"
+        >
+          Add Filter
+        </button>
+      </div>
+
+      <hr class="w-full h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+
+      <div id="execution-area" class="w-120 mt-4 bg-slate-600 rounded p-4">
+        <h2>Script Execution</h2>
+        <div>
+          <strong>Currently loaded:</strong>
+          <span id="current-script">None</span>
+        </div>
+        <div id="output" class="w-full mt-4 bg-gray-50 text-gray-900 p-4"></div>
+      </div>
+      <hr class="w-full h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+      <section id="root-for-dom-manipulation" class="w-120 mt-4">
+        <button
+          id="clear-dom-btn"
+          class="bg-red-500 hover:bg-red-700 text-white transition font-bold py-2 px-4 rounded"
+        >
+          Clear DOM Area
+        </button>
+        <div id="root" class="w-full mt-4 bg-gray-50 text-gray-900 p-4"></div>
+      </section>
+    </main>
   </body>
 </html>
