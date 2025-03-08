@@ -1,3 +1,4 @@
+// Crea un sottoalbero DOM in modo imperativo e dichiarativo
 /* for (const key in document) {
   console.log(key);
 } */
@@ -5,17 +6,27 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-console.log($$("*"));
-console.log($$("li"));
+console.log(JSON.stringify($$("*"), null, 2)); //console.log($$("*"));
+/console.log(JSON.stringify(document, null, 2)); / / console.log($$("li"));
 
 const root = $("#root");
 
-const lista = $("ul");
+// Crea un sottoalbero DOM in modo imperativo
+const div = document.createElement("div");
+const h1 = document.createElement("h1");
+const span = document.createElement("span");
+span.textContent = "Hello";
+const world = document.createTextNode(" World");
+h1.appendChild(span);
+h1.appendChild(world);
+const p = document.createElement("p");
+p.textContent = "This is a paragraph";
+div.appendChild(h1);
+div.appendChild(p);
 
-const li = document.createElement("li");
-li.textContent = "Tre";
-lista.appendChild(li);
+root.appendChild(div);
 
+// Crea un sottoalbero DOM in modo dichiarativo
 const myDom = {
   type: "div",
   children: [
@@ -30,6 +41,8 @@ const myDom = {
   ],
 };
 
+// Funzione di libreria che fa il render di un sottoalbero DOM (ricorsiva)
+// mi permette di costruire un sottoalbero DOM in modo dichiarativo
 const render = (dom, container) => {
   if (dom.type === "text") {
     container.appendChild(document.createTextNode(dom.value));
@@ -40,7 +53,11 @@ const render = (dom, container) => {
   }
 };
 
+// uso la funzione di libreria per costruire il mio sottoalbero DOM
+// "dichiarato" precedentemente
 render(myDom, root);
+
+// OTHER STUFF DON'T BOTHER
 
 /* const shadowRoot = root.attachShadow({ mode: "open" });
 shadowRoot.innerHTML = `

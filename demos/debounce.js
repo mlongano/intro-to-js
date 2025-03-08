@@ -1,9 +1,9 @@
-// debounce function to prevent multiple calls to the function
-// accept the function to be debounced, the wait time and a boolean to execute the function immediately
-// if the boolean is true, the function will be executed immediately and the next call will be debounced
-// if the function is called again within the wait time, the timer will be reset and the function will be called again
-// with the timer set to initial value
-// the context of the function will be the same as the context of the original function
+// Debounce function to prevent multiple calls to a function.
+// Accept: the function to be debounced, the wait time and a boolean to execute the function immediately.
+// If the boolean is true, the function will be executed immediately and the next call will be debounced.
+// If the function is called again within the wait time, the timer will be reset and the function will be called again
+// with the timer set to initial value.
+// The context of the function will be the same as the context of the original function
 // preserved using the closure on context=this and the apply method
 //
 function debounce(func, wait, immediate) {
