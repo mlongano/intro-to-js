@@ -6,8 +6,8 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-console.log(JSON.stringify($$("*"), null, 2)); //console.log($$("*"));
-/console.log(JSON.stringify(document, null, 2)); / / console.log($$("li"));
+//console.log(JSON.stringify($$("*"), null, 2)); //console.log($$("*"));
+//console.log(JSON.stringify(document, null, 2)); / / console.log($$("li"));
 
 const root = $("#root");
 
@@ -24,14 +24,18 @@ p.textContent = "This is a paragraph";
 div.appendChild(h1);
 div.appendChild(p);
 
-root.appendChild(div);
+// root.appendChild(div);
 
 // Crea un sottoalbero DOM in modo dichiarativo
-const myDom = {
+let markup = {
   type: "div",
   children: [
     {
       type: "h1",
+      attributes: [
+        { name: "id", value: "title" },
+        { name: "class", value: "text-3xl font-bold mb-4" },
+      ],
       children: [
         { type: "span", children: [{ type: "text", value: "Hello" }] },
         { type: "text", value: " World" },
@@ -42,15 +46,28 @@ const myDom = {
 };
 
 // Funzione di libreria che fa il render di un sottoalbero DOM (ricorsiva)
-// mi permette di costruire un sottoalbero DOM in modo dichiarativo
-const render = (dom, container) => {
-  if (dom.type === "text") {
-    container.appendChild(document.createTextNode(dom.value));
-  } else {
-    const el = document.createElement(dom.type);
-    dom.children.forEach((child) => render(child, el));
-    container.appendChild(el);
+// mi permette di costruire un sottoalbero DOM in modo dichiarativonewDOMNode.setAttribute(attr.name, attr.value);      subtree.attributes.forEach((attr) => {    if (Array.isArray(subtree.attributes && subtree.type !== "text"))
+//  subtree.attributes.forEach((attr) => {    if (Array.isArray(subtree.attributes && subtree.type !== "text"))
+const render = (subtree, container) => {
+  console.log("Rendering subtree: ", subtree.type);
+  const newDOMNode =
+    subtree.type === "text"
+      ? document.createTextNode(subtree.value)
+      : document.createElement(subtree.type);
+
+  // Se ci sono attributi vengono aggiunti al nuovo elemento DOM.
+  if (Array.isArray(subtree.attributes) && subtree.type !== "text") {
+    subtree.attributes.forEach((attr) => {
+      console.log("Adding attribute: ", attr.name, "=", attr.value);
+      newDOMNode.setAttribute(attr.name, attr.value);
+    });
   }
+
+  if (Array.isArray(subtree.children)) {
+    subtree.children.forEach((child) => render(child, newDOMNode));
+  }
+  // console.log(container.type);
+  container.appendChild(newDOMNode);
 };
 
 // uso la funzione di libreria per costruire il mio sottoalbero DOM
@@ -96,7 +113,7 @@ function addElement(subtree, parentDOMNode) {
   console.log(parentDOMNode);
   parentDOMNode.appendChild(newDOMNode);
 }
-addElement(markup, root);
+//addElement(markup, root);
 
 // OTHER STUFF DON'T BOTHER
 
