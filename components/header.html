@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
-    <link href="css/style.css" rel="stylesheet" />
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
   </head>
   <body class="w-screen h-screen bg-gray-900 text-white">
@@ -34,5 +33,52 @@
         </li>
       </ul>
     </nav>
+    <script>
+      // Get URL parameters to customize the component
+      function getParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+      }
+
+      // Handle messages from parent window
+      window.addEventListener("message", function (event) {
+        // Make sure message is from parent
+        if (event.source !== window.parent) return;
+
+        if (event.data.type === "hello") {
+          if (event.data.message) {
+            console.log(event.data.message);
+          }
+          if (event.data.anotherContent) {
+            console.log(event.data.anotherContent);
+          }
+        }
+      });
+
+      // Send message to parent when button is clicked
+      function notifyParent() {
+        window.parent.postMessage(
+          {
+            type: "hello",
+            message: "Hello from child iframe!",
+          },
+          "*",
+        );
+      }
+
+      // Initialize with URL parameters if available
+      window.onload = function () {
+        const param = getParam("param");
+        const param1 = getParam("param1");
+
+        if (param) {
+          console.log(`Param from URL: ${param}`);
+        }
+        if (param1) {
+          console.log(`Param1 from URL: ${param1}`);
+        }
+      };
+      notifyParent();
+    </script>
   </body>
 </html>
