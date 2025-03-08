@@ -1,5 +1,8 @@
 // Store file contents for later execution
 const fileContents = {};
+getScriptsFromCache();
+const clearCacheBtn = document.getElementById("clear-script-cache-btn");
+clearCacheBtn.addEventListener("click", clearScriptCache);
 
 // Array to store filter regexps
 let filterRegexps = [];
@@ -95,7 +98,10 @@ document
 
         reader.onload = function (e) {
           const content = e.target.result;
-          fileContents[file.name] = content;
+          fileContents[file.name] = {};
+          fileContents[file.name]["name"] = file.name;
+          fileContents[file.name]["title"] = file.name;
+          fileContents[file.name]["content"] = content;
 
           // Extract first comment (if any)
           let description = "No description available";
@@ -103,21 +109,13 @@ document
           if (commentMatch && commentMatch[1]) {
             description = commentMatch[1].trim();
           }
+          fileContents[file.name]["description"] = description;
 
-          // Create list item
-          const listItem = document.createElement("li");
-          listItem.className = "js-file  pointer ";
-          listItem.innerHTML = `
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-description">${description}</div>
-                    `;
+          // Store in cache
+          storeScriptInCache(file.name);
 
-          // Add click handler
-          listItem.addEventListener("click", function () {
-            loadAndExecuteScript(file.name);
-          });
-
-          fileList.appendChild(listItem);
+          // add to scripts list
+          createScriptListItem(fileContents[file.name], fileList);
         };
 
         reader.readAsText(file);
@@ -126,7 +124,7 @@ document
 
 // Function to load and execute a script
 function loadAndExecuteScript(fileName) {
-  const content = fileContents[fileName];
+  const content = fileContents[fileName].content;
   document.getElementById("current-script").textContent = fileName;
 
   // Clear previous output and stored messages
@@ -148,16 +146,20 @@ const addFilterBtn = document.getElementById("add-filter-btn");
 
 // Function to add a new filter input
 function addFilterInput(value = "") {
-  const filterItem = document.createElement("div");
-  filterItem.className = "filter-item";
+  const filterItem = document.createElement("section");
+  filterItem.className = "flex items-center mb-4";
 
   const input = document.createElement("input");
   input.type = "text";
   input.placeholder = "Enter regex pattern to filter";
   input.value = value;
+  input.className =
+    "w-80 text-sm border dark:text-gray-200 rounded-lg p-2 mr-2";
 
   const removeBtn = document.createElement("button");
   removeBtn.textContent = "Remove";
+  removeBtn.className =
+    "bg-red-500 hover:bg-red-700 text-white transition font-bold py-2 px-4 rounded";
   removeBtn.addEventListener("click", function () {
     filterItem.remove();
     updateFilters();
@@ -207,8 +209,13 @@ filtersListDiv.addEventListener(
   }, 500),
 );
 
+const clearDomBtn = document.getElementById("clear-dom-btn");
+clearDomBtn.addEventListener("click", () => {
+  document.getElementById("root").innerHTML = "";
+});
+
 // Add one empty filter input by default
-setTimeout(addFilterInput, 100);
+// setTimeout(addFilterInput, 100);
 
 // LIBRARY
 //
@@ -234,4 +241,73 @@ function debounce(func, wait, immediate = false) {
     timeout = setTimeout(later, wait);
     if (callNow) func.apply(context, args);
   };
+}
+
+// Function to clear script cache
+function clearScriptCache() {
+  const fileList = document.getElementById("file-list");
+  fileList.innerHTML = "";
+  Object.keys(fileContents).forEach((key) => {
+    delete fileContents[key];
+  });
+
+  // Get all localStorage keys
+  const keys = Object.keys(localStorage);
+
+  // Filter for script keys and remove them
+  keys
+    .filter((key) => key.startsWith("script_"))
+    .forEach((key) => {
+      localStorage.removeItem(key);
+    });
+
+  console.log("Script cache cleared");
+}
+
+function getScriptsFromCache() {
+  const scriptList = document.getElementById("file-list");
+  scriptList.innerHTML = "";
+  // Get all localStorage keys
+  const keys = Object.keys(localStorage);
+
+  // Filter for script keys and return them
+  keys
+    .filter((key) => key.startsWith("script_"))
+    .forEach((key) => {
+      const content = localStorage.getItem(key);
+      fileContents[key.replace("script_", "")] = JSON.parse(content);
+    });
+  if (Object.keys(fileContents).length > 0) {
+    Object.keys(fileContents).forEach((key) => {
+      createScriptListItem(fileContents[key], scriptList);
+    });
+
+    console.log("Script cache loaded");
+  }
+}
+
+// Function to load and cache a script
+function storeScriptInCache(fileName) {
+  // store the json structure for script information
+  fileContents[fileName].timestamp = Date.now();
+
+  const content = JSON.stringify(fileContents[fileName]);
+  // Store in localStorage with timestamp
+  localStorage.setItem(`script_${fileName}`, content);
+  console.log(`Script ${fileName} cached`);
+}
+
+function createScriptListItem(fileContent, parent) {
+  const listItem = document.createElement("li");
+  listItem.className =
+    "bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer p-4 mb-4";
+  listItem.innerHTML = `
+                <h2 class="text-lg font-semibold">${fileContent.title}</h2>
+                <p class="text-gray-500">${fileContent.description}</p>
+            `;
+  // Add click handler
+  listItem.addEventListener("click", function () {
+    loadAndExecuteScript(fileContent.name);
+  });
+  parent.appendChild(listItem);
 }
