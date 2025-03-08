@@ -55,7 +55,48 @@ const render = (dom, container) => {
 
 // uso la funzione di libreria per costruire il mio sottoalbero DOM
 // "dichiarato" precedentemente
-render(myDom, root);
+render(markup, root);
+// Demo sul corso Understanding React (Tony Alicea)
+markup = {
+  type: "article",
+  children: [
+    {
+      type: "h2",
+      children: [{ type: "text", value: "Counter" }],
+    },
+    {
+      type: "p",
+      children: [
+        { type: "text", value: "Counter " },
+        {
+          type: "strong",
+          children: [{ type: "em", children: [{ type: "text", value: "1" }] }],
+        },
+        {
+          type: "text",
+          value: " times",
+        },
+      ],
+    },
+    {
+      type: "button",
+      children: [{ type: "text", value: "Click me" }],
+    },
+  ],
+};
+
+function addElement(subtree, parentDOMNode) {
+  let newDOMNode =
+    subtree.type === "text"
+      ? document.createTextNode(subtree.value)
+      : document.createElement(subtree.type);
+  if (Array.isArray(subtree.children)) {
+    subtree.children.forEach((child) => addElement(child, newDOMNode));
+  }
+  console.log(parentDOMNode);
+  parentDOMNode.appendChild(newDOMNode);
+}
+addElement(markup, root);
 
 // OTHER STUFF DON'T BOTHER
 
