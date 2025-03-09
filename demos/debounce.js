@@ -6,21 +6,23 @@
 // The context of the function will be the same as the context of the original function
 // preserved using the closure on context=this and the apply method
 //
-function debounce(func, wait, immediate) {
-  var timeout;
+/* eslint-disable no-unused-vars */
+function debounceOLD(func, wait, immediate) {
+  let timeout; // Crea una closure su timeout
   return function () {
-    var context = this,
+    var context = this, // Cattura il contesto corrente (this)
       args = arguments;
     var later = function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
-    var callNow = immediate && !timeout;
+    let callNow = immediate && !timeout;
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
     if (callNow) func.apply(context, args);
   };
 }
+
 
 // Usage examples:
 // const debouncedFunction = debounce(function() {
