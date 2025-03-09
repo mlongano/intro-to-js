@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello World</title>
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+
+  <!-- Import Babel for JSX support -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- React Component with JSX -->
+  <script type="text/babel" data-type="module">
+    // Use Babel's JSX with module syntax
+    ( async () => {
+      // Dynamic imports for React 19
+      const React = await import( "https://esm.sh/react@19/" );
+      const ReactDOMClient = await import(
+        "https://esm.sh/react-dom@19/client"
+      );
+      const ReactDOM = await import( "https://esm.sh/react-dom@19/" ); //Import for createPortal
+      const { useState } = React.default;
+      const { createRoot } = ReactDOMClient;
+      const { createPortal } = ReactDOM;
+
+      function Portal ( { children } ) {
+        const portalRoot = document.getElementById( "portal-root" );
+        return createPortal( children, portalRoot );
+      }
+
+      function App () {
+        const [ parentClickCount, setParentClickCount ] = useState( 0 );
+
+        // This handler will catch events from the portal
+        const handleClick = () => {
+          setParentClickCount( ( prev ) => prev + 1 );
+          console.log( "Parent component received click event" );
+        };
+
+        return (
+          <div className="app" onClick={handleClick}>
+            <h1>React Portal Event Bubbling Demo</h1>
+            <p>Parent click count: {parentClickCount}</p>
+            <p>Click anywhere in the modal to see event bubbling in action</p>
+
+            <Portal>
+              <div className="modal">
+                <h2>This content is in a portal</h2>
+                <p>
+                  Click events here will bubble up to the parent component
+                </p>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  Click me
+                </button>
+              </div>
+            </Portal>
+          </div>
+        );
+      }
+
+      // Ensure DOM is ready, then render
+      const rootElement = document.getElementById( "root" );
+      const root = createRoot( rootElement );
+      root.render( <App /> );
+    } )();
+  </script>
+</head>
+
+<body>
+  <header>
+    <iframe id="header-iframe" src="header.html?param=this is a param&param1=this is the second param" frameborder="0"
+      scrolling="no" style="width: 100%; height: 4rem; border: none; overflow: hidden">
+    </iframe>
+  </header>
+  <a href="https://babeljs.io/repl">Try Babel to see how JSX compiles</a>
+  <div id="root"></div>
+  <div id="portal-root"></div>
+  <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this page for starting a new React project with JSX:
+      https://react.dev/learn/start-a-new-react-project
+
+      Read this page for adding React with JSX to an existing project:
+      https://react.dev/learn/add-react-to-an-existing-project
+    -->
+</body>
+
+</html>
