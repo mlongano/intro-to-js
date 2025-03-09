@@ -23,6 +23,65 @@ function debounceOLD(func, wait, immediate) {
   };
 }
 
+// More modern simplified version
+function debounce(func, delay, immediate = false) {
+  let timer = null; // Crea una closure su timeout
+  // Funzione ritornata da usare al posto della funzione originale
+  return function (...args) {
+    const context = this; // Cattura il contesto al momento della chiamata (this) per usarlo per la funzione originle
+    if (timer !== null) {
+      console.log(`Clearing existing timer  args: ${JSON.stringify(args)}`);
+      clearTimeout(timer); // Se il timer esiste vuol dire che la funzione è stata richiamata prima che il delay fosse scaduto
+    }
+    const callNow = immediate && !timer; // Nel caso voglia chiamare subito la funzione originale determino se non sia già stato chiamata
+    console.log(
+      `Debounced function invoked with args: ${JSON.stringify(
+        args,
+      )}, context: ${JSON.stringify(context)}, immediate: ${immediate}, callNow: ${callNow} timer: ${timer}.`,
+    );
+    console.log(`Setting timer for ${delay}ms`);
+    timer = setTimeout(() => {
+      console.log("Timeout expired; running delayed callback.");
+      timer = null;
+      // Nel caso non sia immedite allo scadere del delay eseguo la funzione originale
+      // Il context viene catturato dalla closure al momento della chiamata ed è quello che avrebbe avuto la funzione originale
+      if (!immediate) {
+        console.log(
+          "Immediate is false; executing function after delay with args:",
+          args,
+        );
+        func.apply(context, args);
+      }
+    }, delay); // Imposto faccio partire il timer che eseguirà la funzione originale dopo il delay nel caso immediate sia false
+    if (callNow) {
+      console.log(
+        "Immediate is true and no active timer; executing function immediately with args:",
+        args,
+      );
+      func.apply(context, args); // Se voglio chiamare subito la funzione originale la eseguo (il timer adesso esiste)
+    }
+  };
+}
+
+function myDebounce(funcToBeCalled, delay) {
+  // Creo la closure per il timer
+  let timer = null;
+  // creo e ritorno la funzione che verrà usata al posto dell'originale (che e' funcToBeCalled)
+  return function (...args) {
+    // catturo il contesto di chiamata per poterlo usare nella funzione originale quando sarà chimata
+    const context = this;
+    // Controllo che non ci sia un'altra chiamata in attesa e nel caso la cancello
+    if (timer !== null) {
+      clearTimeout(timer);
+    }
+    // creo un nuovo timer per chiamare la funzione originale dopo il delay
+    timer = setTimeout(() => {
+      // alla scadenza del timer chiamo (eseguo) la funzione originale
+      // usando il contesto ed i parametri catturati alla chiamata della funzione proxy
+      funcToBeCalled.apply(context, args);
+    }, delay);
+  };
+}
 
 // Usage examples:
 // const debouncedFunction = debounce(function() {
