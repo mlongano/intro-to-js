@@ -88,19 +88,48 @@ function myDebounce(funcToBeCalled, delay) {
 //   console.log('Function called');
 // }, 1000, true); // true for immediate execution
 
-const log = debounce(
-  function (message) {
-    console.log(message);
-  },
-  1000,
-  true,
-);
+const demoObject = {
+  message: "Hello",
+  log: debounce(
+    function (newMessage) {
+      console.log(`Old message: ${this.message}, new message: ${newMessage}`);
+      this.message = newMessage;
+    },
+    1000,
+    true,
+  ),
+};
 
-log("Hello");
-setTimeout(() => log("World"), 1001);
-setTimeout(() => log("Hello 1"), 1001);
-setTimeout(() => log("World 1"), 1001);
-setTimeout(() => log("Hello 3"), 2002);
-setTimeout(() => log("World 3"), 2002);
-log("Hello 2");
-log("World 2");
+// La funzione demoObject.log ha una closure su timer che rimane lo stesso per tutte le chiamate di demoObject.log.
+// Al momento della sua chiamata crea una closure su this che viene catturato e passato alla funzione originale
+// che a cui farà riferimento al momento della chiamata che potrebbe essere in un altro contesto.
+// In questo caso il contesto è demoObject.
+
+demoObject.log("World");
+setTimeout(() => demoObject.log("Last State"), 1001); // Messe nella callback queue dopo 1001ms
+setTimeout(() => demoObject.log("Hello 1"), 1001);
+setTimeout(() => demoObject.log("World 1"), 1001);
+setTimeout(() => demoObject.log("Hello 3"), 2002);
+setTimeout(() => demoObject.log("World 3"), 2002);
+demoObject.log("Hello 2"); // Eseguite subito dopo demoObject.log("World"); creano un nuovo timer che eseguirà la funzione dopo 1000ms
+demoObject.log("World 2"); // Eseguite subito dopo demoObject.log("World"); creano un nuovo timer che eseguirà la funzione dopo 1000ms
+setTimeout(() => {
+  console.log(`Last state is: ${demoObject.message}`);
+}, 3000);
+
+// const log = debounce(
+//   function (message) {
+//     console.log(message);
+//   },
+//   1000,
+//   true,
+// );
+//
+// log("Hello");
+// setTimeout(() => log("World"), 1001);
+// setTimeout(() => log("Hello 1"), 1001);
+// setTimeout(() => log("World 1"), 1001);
+// setTimeout(() => log("Hello 3"), 2002);
+// setTimeout(() => log("World 3"), 2002);
+// log("Hello 2");
+// log("World 2");
