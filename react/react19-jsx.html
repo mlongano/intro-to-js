@@ -1,47 +1,78 @@
 <!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Understanding React</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Understanding React</title>
+        <!-- import Tailwindcss directly in the html page -->
+        <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 
-  <!-- Import Babel for JSX support -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <!-- Import Babel for JSX support -->
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- React Component with JSX -->
-  <script type="text/babel" data-type="module">
-    // Use Babel's JSX with module syntax
-    ( async () => {
-      // Dynamic imports for React 19
-      const React = await import( "https://esm.sh/react@19/?dev" );
-      const ReactDOM = await import( "https://esm.sh/react-dom@19/client?dev" );
+        <!-- React Component with JSX -->
+        <script type="text/babel" data-type="module">
+            // Use Babel's JSX with module syntax
+            (async () => {
+                // Dynamic imports for React 19
+                const React = await import("https://esm.sh/react@19/?dev");
+                const ReactDOM = await import(
+                    "https://esm.sh/react-dom@19/client?dev"
+                );
 
-      const { useState } = React.default;
-      const { createRoot } = ReactDOM.default;
+                const { useState } = React.default;
+                const { createRoot } = ReactDOM.default;
 
-      function Counter () {
-        return (
-          <div>Hello Counter</div> // JSX is converted to React.createElement(); // app code here
-        );
-      }
+                function Counter() {
+                    const [count, setCount] = useState(0);
+                    return (
+                        <div className="bg-gray-100 p-4  max-w-md m-4 rounded shadow">
+                            <p className="text-blue-500 mb-4">Hello Counter</p>
+                            <button
+                                className="bg-green-500 text-white px-2 py-1 mx-2 rounded"
+                                onClick={() => setCount(count + 1)}
+                            >
+                                +
+                            </button>
+                            <button
+                                className="bg-red-500 text-white px-2 py-1 mx-2 rounded"
+                                onClick={() => setCount(count - 1)}
+                            >
+                                -
+                            </button>
+                            <span className="text-gray-700 text-xl font-bold px-2 mx-2">
+                                {count}
+                            </span>
+                        </div> // JSX is converted to React.createElement(); // app code here
+                    );
+                }
 
-      // Ensure DOM is ready, then render
-      const rootElement = document.getElementById( "root" );
-      const root = createRoot( rootElement );
-      root.render( <Counter /> );
-    } )();
-  </script>
-</head>
+                // Ensure DOM is ready, then render
+                const rootElement = document.getElementById("root");
+                const root = createRoot(rootElement);
+                root.render(<Counter />);
+            })();
+        </script>
+    </head>
 
-<body>
-  <header>
-    <iframe id="header-iframe" src="header.html?param=this is a param&param1=this is the second param" frameborder="0"
-      scrolling="no" style="width: 100%; height: 4rem; border: none; overflow: hidden">
-    </iframe>
-  </header>
-  <main id="root"></main>
-</body>
-
+    <body>
+        <header>
+            <iframe
+                id="header-iframe"
+                src="header.html?param=this is a param&param1=this is the second param"
+                frameborder="0"
+                scrolling="no"
+                style="
+                    width: 100%;
+                    height: 4rem;
+                    border: none;
+                    overflow: hidden;
+                "
+            >
+            </iframe>
+        </header>
+        <main id="root"></main>
+    </body>
 </html>
