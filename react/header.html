@@ -1,84 +1,107 @@
 <!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title></title>
+        <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title></title>
-  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-</head>
+    <body
+        class="flex justify-between items-center w-screen h-screen bg-gray-900 text-white"
+    >
+        <section class="flex justify-end items-center pl-4 pr-10 h-full">
+            <a
+                href="/"
+                target="_top"
+                class="text-2xl text-purple-500 drop-shadow-lg"
+                >JS Playground</a
+            >
+        </section>
+        <nav class="flex grow justify-between items-center px-4 h-full">
+            <ul
+                class="flex justify-between items-center space-x-4 w-full h-full"
+            >
+                <li>
+                    <a href="react19-no-jsx.html" target="_top"
+                        >Test React 19 in the browser (no JSX)</a
+                    >
+                </li>
+                <li>
+                    <a href="react19-jsx.html" target="_top"
+                        >Test React 19 in the browser (JSX)</a
+                    >
+                </li>
+                <li>
+                    <a href="react18.html" target="_top"
+                        >Test React 18 in the browser</a
+                    >
+                </li>
+                <li>
+                    <a href="react18scripts.html" target="_top"
+                        >Test React 18 in the browser</a
+                    >
+                </li>
+                <li>
+                    <a href="react-dom-and-portal.html" target="_top"
+                        >React Portals</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="https://github.com/mlongano/react-race-condition-demo"
+                        target="_top"
+                        >React Race Condition</a
+                    >
+                </li>
+            </ul>
+        </nav>
+        <script>
+            // Get URL parameters to customize the component
+            function getParam(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            }
 
-<body class="flex justify-between items-center w-screen h-screen bg-gray-900 text-white">
-  <section class="flex justify-end items-center pl-4 pr-10 h-full">
-    <a href="/" target="_top" class="text-2xl text-purple-500 drop-shadow-lg">JS Playground</a>
-  </section>
-  <nav class="flex grow justify-between items-center px-4 h-full">
-    <ul class="flex justify-between items-center space-x-4 w-full h-full">
-      <li>
-        <a href="react19-no-jsx.html" target="_top">Test React 19 in the browser (no JSX)</a>
-      </li>
-      <li>
-        <a href="react19-jsx.html" target="_top">Test React 19 in the browser (JSX)</a>
-      </li>
-      <li>
-        <a href="react18.html" target="_top">Test React 18 in the browser</a>
-      </li>
-      <li>
-        <a href="react-dom-and-portal.html" target="_top">React Portals</a>
-      </li>
-      <li>
-        <a href="https://github.com/mlongano/react-race-condition-demo" target="_top">React Race Condition</a>
-      </li>
+            // Handle messages from parent window
+            window.addEventListener("message", function (event) {
+                // Make sure message is from parent
+                if (event.source !== window.parent) return;
 
-    </ul>
-  </nav>
-  <script>
-    // Get URL parameters to customize the component
-    function getParam ( name ) {
-      const urlParams = new URLSearchParams( window.location.search );
-      return urlParams.get( name );
-    }
+                if (event.data.type === "hello") {
+                    if (event.data.message) {
+                        console.log(event.data.message);
+                    }
+                    if (event.data.anotherContent) {
+                        console.log(event.data.anotherContent);
+                    }
+                }
+            });
 
-    // Handle messages from parent window
-    window.addEventListener( "message", function ( event ) {
-      // Make sure message is from parent
-      if ( event.source !== window.parent ) return;
+            // Send message to parent when button is clicked
+            function notifyParent() {
+                window.parent.postMessage(
+                    {
+                        type: "hello",
+                        message: "Hello from child iframe!",
+                    },
+                    "*",
+                );
+            }
 
-      if ( event.data.type === "hello" ) {
-        if ( event.data.message ) {
-          console.log( event.data.message );
-        }
-        if ( event.data.anotherContent ) {
-          console.log( event.data.anotherContent );
-        }
-      }
-    } );
+            // Initialize with URL parameters if available
+            window.onload = function () {
+                const param = getParam("param");
+                const param1 = getParam("param1");
 
-    // Send message to parent when button is clicked
-    function notifyParent () {
-      window.parent.postMessage(
-        {
-          type: "hello",
-          message: "Hello from child iframe!",
-        },
-        "*",
-      );
-    }
-
-    // Initialize with URL parameters if available
-    window.onload = function () {
-      const param = getParam( "param" );
-      const param1 = getParam( "param1" );
-
-      if ( param ) {
-        console.log( `Param from URL: ${param}` );
-      }
-      if ( param1 ) {
-        console.log( `Param1 from URL: ${param1}` );
-      }
-    };
-    notifyParent();
-  </script>
-</body>
-
+                if (param) {
+                    console.log(`Param from URL: ${param}`);
+                }
+                if (param1) {
+                    console.log(`Param1 from URL: ${param1}`);
+                }
+            };
+            notifyParent();
+        </script>
+    </body>
 </html>
