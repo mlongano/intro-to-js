@@ -8,24 +8,13 @@
 
         <!-- Don't use this in production: -->
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+        <script src="/js/include.js" defer></script>
     </head>
 
     <body>
-        <header>
-            <iframe
-                id="header-iframe"
-                src="header.html?param=this is a param&param1=this is the second param"
-                frameborder="0"
-                scrolling="no"
-                style="
-                    width: 100%;
-                    height: 4rem;
-                    border: none;
-                    overflow: hidden;
-                "
-            >
-            </iframe>
-        </header>
+        <include src="/react/header.html"></include>
+
         <a href="https://babeljs.io/repl">Try Babel to see how JSX compiles</a>
         <div id="root"></div>
         <script type="text/babel">
@@ -55,7 +44,7 @@
             function MyApp() {
                 return (
                     <Layout>
-                        <h2>Hello, world!</h2>
+                        <h2>Hello, world!!!!!</h2>
                     </Layout>
                 );
             }

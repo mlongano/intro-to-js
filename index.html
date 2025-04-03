@@ -1,57 +1,28 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title></title>
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-  </head>
-  <body>
-    <header>
-      <iframe
-        id="header-iframe"
-        src="components/header.html?param=this is a param&param1=this is the second param"
-        frameborder="0"
-        scrolling="no"
-        style="width: 100%; height: 4rem; border: none; overflow: hidden"
-      >
-      </iframe>
-    </header>
-    <main class="bg-[url(/images/background.jpeg)] bg-cover h-screen">
-      <section
-        class="bg-black/60 backdrop-blur-none h-full flex flex-col justify-center items-center"
-      >
-        <article class="bg-black/30 backdrop-blur-lg text-white p-8">
-          <h1 class="text-3xl font-bold mb-4">JavaScript Playground</h1>
-          <p class="mb-4">
-            Una semplice applicazione per testare semplici script JavaScript e
-            introdurre React
-          </p>
-        </article>
-      </section>
-    </main>
-    <script>
-      const iframe = document.getElementById("header-iframe");
-      // Wait for iframe to load
-      iframe.onload = function () {
-        iframe.contentWindow.postMessage(
-          {
-            type: "hello",
-            message: "This is a post message param",
-            anotherContent: "This content was set via postMessage",
-          },
-          "*",
-        );
-      };
-      // Listen for messages from the iframe
-      window.addEventListener("message", function (event) {
-        // Make sure message is from our iframe
-        if (event.source !== iframe.contentWindow) return;
-
-        if (event.data.type === "hello") {
-          console.log(`${event.data.message}`);
-        }
-      });
-    </script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title></title>
+        <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    </head>
+    <body>
+        <include src="/components/header.html"></include>
+        <main class="bg-[url(/images/background.jpeg)] bg-cover h-screen">
+            <section
+                class="bg-black/60 backdrop-blur-none h-full flex flex-col justify-center items-center"
+            >
+                <article class="bg-black/30 backdrop-blur-lg text-white p-8">
+                    <h1 class="text-3xl font-bold mb-4">
+                        JavaScript Playground
+                    </h1>
+                    <p class="mb-4">
+                        Una semplice applicazione per testare semplici script
+                        JavaScript e introdurre React
+                    </p>
+                </article>
+            </section>
+        </main>
+        <script src="js/include.js"></script>
+    </body>
 </html>
